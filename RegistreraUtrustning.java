@@ -4,17 +4,35 @@
  */
 package huvudsidaA;
 
+import static com.sun.tools.attach.VirtualMachine.list;
+import static java.nio.file.Files.list;
+import java.util.ArrayList;
+import static java.util.Collections.list;
+import java.util.HashMap;
+import javax.swing.JOptionPane;
+import oru.inf.InfDB;
+import oru.inf.InfException;
+
 /**
  *
  * @author elina
  */
 public class RegistreraUtrustning extends javax.swing.JFrame {
 
+    private InfDB idb;
+
     /**
      * Creates new form RegistreraUtrustning
      */
     public RegistreraUtrustning() {
         initComponents();
+        try {
+            idb = new InfDB("mibdb", "3306", "mibdba", "mibkey");
+
+        } catch (InfException e) {
+            JOptionPane.showMessageDialog(null, "Något gick fel");
+            System.out.println("Internet felmeddelande" + e.getMessage());
+        }
     }
 
     /**
@@ -30,6 +48,7 @@ public class RegistreraUtrustning extends javax.swing.JFrame {
         utrustningLbl = new javax.swing.JLabel();
         utrustningTxt = new javax.swing.JTextField();
         registrerabtn = new javax.swing.JToggleButton();
+        aterbtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -46,6 +65,13 @@ public class RegistreraUtrustning extends javax.swing.JFrame {
             }
         });
 
+        aterbtn.setText("Återgå tll startsida");
+        aterbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                aterbtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -53,14 +79,18 @@ public class RegistreraUtrustning extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(198, 198, 198)
-                        .addComponent(utrustningLbl))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(32, 32, 32)
                         .addComponent(utrustningTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(registrerabtn, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(registrerabtn, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(197, 197, 197)
+                        .addComponent(aterbtn)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(utrustningLbl)
+                .addGap(200, 200, 200))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -71,7 +101,9 @@ public class RegistreraUtrustning extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(utrustningTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(registrerabtn))
-                .addContainerGap(262, Short.MAX_VALUE))
+                .addGap(58, 58, 58)
+                .addComponent(aterbtn)
+                .addContainerGap(182, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -93,22 +125,57 @@ public class RegistreraUtrustning extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void registrerabtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrerabtnActionPerformed
-  String utrustning = utrustningTxt.getText();
-  
-  String rakna = "SELECT MAX(utrustnings_ID) FROM utrustning";
-  int raknare = Integer.parseInt(rakna);
-  int i = 4;
-  while(raknare>i)
-  {
-      raknare++;
-      String Utrustningsfraga ="INSERT INTO utrustning VALUES ( "+ raknare+"'" + utrustning + " ' )" ; 
-      i++;
-  }
-  
-        
-        
-        
+        String utrustning = utrustningTxt.getText();
+
+        try {
+            String raknade = "SELECT MAX(utrustnings_ID) FROM utrustning";
+            String arrayCheck = "SELECT benamning FROM utrustning";
+            ArrayList<String> hamtaCheck = idb.fetchColumn(arrayCheck);
+            String hamtadeVarde = idb.fetchSingle(raknade);
+            int number = Integer.parseInt(hamtadeVarde);
+            int i = number;
+            boolean hasVapen = false;
+
+            while (number >= i) {
+                i++;
+                if (utrustning.isBlank()) { //denna kollar om textrutan är tom
+                    JOptionPane.showMessageDialog(null, "fällten måste vara ifyllda");
+                    break;
+                }
+
+                if (hamtaCheck.contains(utrustning)) // <- look for item!
+                { // 
+                    // ... item already in list
+                    hasVapen = true;
+                    System.out.println("Ett vapen med namnet:" + utrustning + "finns redan i systemet");
+                    break;// vi tar en break för att skriva ut svaret en gång och inte för varje objekt i arrayen
+                } 
+                else 
+                {
+                    hasVapen = false;
+                       String utrustningsfraga = "INSERT INTO utrustning VALUES ( " + i + ",'" + utrustning + "' )";
+
+                    idb.insert(utrustningsfraga);
+                    System.out.println("har skickats till databasen");
+
+                }
+
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Något gick fel");
+            System.out.println("Internet felmeddelande" + e.getMessage());
+        }
+
+
     }//GEN-LAST:event_registrerabtnActionPerformed
+
+    private void aterbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aterbtnActionPerformed
+
+        this.setVisible(false);
+
+
+    }//GEN-LAST:event_aterbtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -146,6 +213,7 @@ public class RegistreraUtrustning extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton aterbtn;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JToggleButton registrerabtn;
     private javax.swing.JLabel utrustningLbl;
