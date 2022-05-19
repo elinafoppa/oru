@@ -4,19 +4,36 @@
  */
 package huvudsidaA;
 
+import java.time.LocalDate;
+import java.text.SimpleDateFormat;  
+import java.util.Date;  
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+
+
 import javax.swing.JOptionPane;
+import oru.inf.InfDB;
+import oru.inf.InfException;
 
 /**
  *
  * @author elina
  */
 public class RegistreraAlien extends javax.swing.JFrame {
-
+ private InfDB idb;
     /**
      * Creates new form RegistreraUtrustning
      */
     public RegistreraAlien() {
         initComponents();
+          try {
+            idb = new InfDB("mibdb", "3306", "mibdba", "mibkey");
+
+        } catch (InfException e) {
+            JOptionPane.showMessageDialog(null, "Något gick fel");
+            System.out.println("Internet felmeddelande" + e.getMessage());
+        }
     }
 
     /**
@@ -30,26 +47,24 @@ public class RegistreraAlien extends javax.swing.JFrame {
 
         alienPanel = new javax.swing.JPanel();
         alienLbl = new javax.swing.JLabel();
-        datumTxt = new javax.swing.JTextField();
         namnTxt = new javax.swing.JTextField();
         losenordTxt = new javax.swing.JTextField();
         telTxt = new javax.swing.JTextField();
-        platsTxt = new javax.swing.JTextField();
         agentTxt = new javax.swing.JTextField();
         registrerabtn = new javax.swing.JButton();
+        rasCombobox = new javax.swing.JComboBox<>();
+        canvas1 = new java.awt.Canvas();
+        jLabel1 = new javax.swing.JLabel();
+        jYearChooser1 = new com.toedter.calendar.JYearChooser();
+        jMonth = new javax.swing.JComboBox<>();
+        jDay = new javax.swing.JComboBox<>();
+        platsCombo = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         alienPanel.setBackground(new java.awt.Color(171, 189, 219));
 
         alienLbl.setText("Registrera ny alien");
-
-        datumTxt.setText("Datum");
-        datumTxt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                datumTxtActionPerformed(evt);
-            }
-        });
 
         namnTxt.setText("Namn");
         namnTxt.addActionListener(new java.awt.event.ActionListener() {
@@ -72,13 +87,6 @@ public class RegistreraAlien extends javax.swing.JFrame {
             }
         });
 
-        platsTxt.setText("Plats");
-        platsTxt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                platsTxtActionPerformed(evt);
-            }
-        });
-
         agentTxt.setText("Ansvarig agent");
         agentTxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -93,6 +101,18 @@ public class RegistreraAlien extends javax.swing.JFrame {
             }
         });
 
+        rasCombobox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Välj ras", "worm", "squid", "bogolite" }));
+
+        jLabel1.setText("Datum");
+
+        jYearChooser1.setDayChooser(null);
+
+        jMonth.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Månad", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" }));
+
+        jDay.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dag", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+
+        platsCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Välj plats", "Örebro", "Västerås", "Vilhelmina", "Borås" }));
+
         javax.swing.GroupLayout alienPanelLayout = new javax.swing.GroupLayout(alienPanel);
         alienPanel.setLayout(alienPanelLayout);
         alienPanelLayout.setHorizontalGroup(
@@ -100,52 +120,63 @@ public class RegistreraAlien extends javax.swing.JFrame {
             .addGroup(alienPanelLayout.createSequentialGroup()
                 .addGroup(alienPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(alienPanelLayout.createSequentialGroup()
-                        .addGap(199, 199, 199)
-                        .addComponent(alienLbl))
+                        .addGap(208, 208, 208)
+                        .addComponent(registrerabtn, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(alienPanelLayout.createSequentialGroup()
-                        .addGap(51, 51, 51)
-                        .addComponent(datumTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(alienPanelLayout.createSequentialGroup()
-                        .addGap(51, 51, 51)
-                        .addComponent(namnTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(alienPanelLayout.createSequentialGroup()
-                        .addGap(51, 51, 51)
-                        .addComponent(losenordTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(alienPanelLayout.createSequentialGroup()
-                        .addGap(51, 51, 51)
-                        .addComponent(telTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(alienPanelLayout.createSequentialGroup()
-                        .addGap(51, 51, 51)
-                        .addComponent(platsTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(alienPanelLayout.createSequentialGroup()
-                        .addGap(51, 51, 51)
-                        .addComponent(agentTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(51, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, alienPanelLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(registrerabtn, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(194, 194, 194)
+                        .addComponent(alienLbl)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, alienPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(alienPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(alienPanelLayout.createSequentialGroup()
+                        .addComponent(canvas1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(96, 96, 96))
+                    .addComponent(losenordTxt)
+                    .addComponent(agentTxt, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(rasCombobox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, alienPanelLayout.createSequentialGroup()
+                        .addComponent(jYearChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(41, 41, 41)
+                        .addComponent(jMonth, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(31, 31, 31)
+                        .addComponent(jDay, 0, 155, Short.MAX_VALUE))
+                    .addComponent(namnTxt, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(telTxt)
+                    .addComponent(platsCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(166, 166, 166))
         );
         alienPanelLayout.setVerticalGroup(
             alienPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(alienPanelLayout.createSequentialGroup()
                 .addGap(24, 24, 24)
+                .addComponent(canvas1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(48, 48, 48)
                 .addComponent(alienLbl)
-                .addGap(59, 59, 59)
-                .addComponent(datumTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(21, 21, 21)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(alienPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jYearChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(alienPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jMonth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(namnTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(12, 12, 12)
                 .addComponent(losenordTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(telTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(platsTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(platsCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
                 .addComponent(agentTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
+                .addGap(32, 32, 32)
+                .addComponent(rasCombobox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
                 .addComponent(registrerabtn)
-                .addContainerGap(482, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -153,22 +184,16 @@ public class RegistreraAlien extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(alienPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(alienPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 563, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 6, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(alienPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(alienPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void datumTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_datumTxtActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_datumTxtActionPerformed
 
     private void namnTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_namnTxtActionPerformed
         // TODO add your handling code here:
@@ -182,27 +207,101 @@ public class RegistreraAlien extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_telTxtActionPerformed
 
-    private void platsTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_platsTxtActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_platsTxtActionPerformed
-
     private void agentTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agentTxtActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_agentTxtActionPerformed
 
     private void registrerabtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrerabtnActionPerformed
         try {
-            String datum = datumTxt.getText();
+            
+  
+ 
+ 
+     
+  
+            
+            
+            int ddatum = jDay.getSelectedIndex();
+            int mdatum = jMonth.getSelectedIndex();
+            int ydatum = jYearChooser1.getYear();
             String password = losenordTxt.getText();
             String namn = namnTxt.getText();
             String telefon = telTxt.getText();
-            String plats = platsTxt.getText();
+            int plats = platsCombo.getSelectedIndex();
             String agent = agentTxt.getText();
-           //losenord.validateLosen(user, password);
-//            String namnfraga = "SELECT NAMN from AGENT where NAMN like '" + user + "'";
-//            String losenfraga = "SELECT LOSENORD from AGENT where NAMN like '" + user + "'";
-//            String hamtadeNamnet = idb.fetchSingle(namnfraga);
-//            String hamtadeLosen = idb.fetchSingle(losenfraga);
+            int ras = rasCombobox.getSelectedIndex();
+            String nextId = idb.getAutoIncrement("ALIEN","ALIEN_ID");
+            String dagdatum = Integer.toString(ddatum);
+            String mondatum = Integer.toString(mdatum);
+            String yeardatum = Integer.toString(ydatum);
+             String datum = yeardatum+ "-" + mondatum + "-" + dagdatum;
+ 
+            String getAgentid = "SELECT AGENT_ID from AGENT where NAMN like '" + agent + "'";
+            String getAgentNamn = "SELECT NAMN from AGENT where NAMN like '" + agent + "'";
+            String hamtaAgentId=idb.fetchSingle(getAgentid);
+            String hamtaAgentNamn=idb.fetchSingle(getAgentNamn);
+            String alieninsertfraga = "INSERT INTO alien VALUES ( " +nextId+ ",'" + datum + "','" +password+ "','" + namn+"','" + telefon +"'," + plats +"," + hamtaAgentId+  " );";
+            System.out.println(alieninsertfraga);
+            int countLosen = password.length();
+            
+            boolean check = false;
+   //gör en IF sats som kollar att det inte är för många tecken          
+ if(agent.equals(hamtaAgentNamn))//kollar om namnet vi skriver in i textfältet existerar i databasen   
+ {
+if(ras<1)
+{
+     JOptionPane.showMessageDialog(null, "Du måste välja ett värde");
+}
+if(plats<1)
+{
+     JOptionPane.showMessageDialog(null, "Du måste välja ett värde");
+}
+if(ddatum<1)
+{
+     JOptionPane.showMessageDialog(null, "Du måste välja ett värde");
+}
+if(mdatum<1)
+{
+     JOptionPane.showMessageDialog(null, "Du måste välja ett värde");
+}
+    if (namn.isBlank() ) 
+               { //denna kollar om rutan är tom
+                JOptionPane.showMessageDialog(null, "fällten måste vara ifyllda");
+               
+            }
+    
+    if (password.isBlank() ) 
+               { //denna kollar om rutan är tom
+                JOptionPane.showMessageDialog(null, "fällten måste vara ifyllda");
+               
+            }
+    
+    if (countLosen>6)
+    {
+        JOptionPane.showMessageDialog(null, "lösenordet för stort max antal tecken är");
+    }
+   
+    check = true;
+   
+ }
+ else{
+     JOptionPane.showMessageDialog(null, "Agenten exsiterar inte i databasen kontrollera stavning");
+ }
+        
+        
+       if (check=true) 
+       {
+              idb.insert(alieninsertfraga);
+               JOptionPane.showMessageDialog(null, "Alien är registrerad i databasen");
+       }
+       else
+       {
+             JOptionPane.showMessageDialog(null, "Misslyckad överföring till databasen försök igen senare");
+       }
+
+
+
+
 //           
 //               if (user.isBlank() ) 
 //               { //denna kollar om rutan är tom
@@ -282,10 +381,15 @@ public class RegistreraAlien extends javax.swing.JFrame {
     private javax.swing.JTextField agentTxt;
     private javax.swing.JLabel alienLbl;
     private javax.swing.JPanel alienPanel;
-    private javax.swing.JTextField datumTxt;
+    private java.awt.Canvas canvas1;
+    private javax.swing.JComboBox<String> jDay;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JComboBox<String> jMonth;
+    private com.toedter.calendar.JYearChooser jYearChooser1;
     private javax.swing.JTextField losenordTxt;
     private javax.swing.JTextField namnTxt;
-    private javax.swing.JTextField platsTxt;
+    private javax.swing.JComboBox<String> platsCombo;
+    private javax.swing.JComboBox<String> rasCombobox;
     private javax.swing.JButton registrerabtn;
     private javax.swing.JTextField telTxt;
     // End of variables declaration//GEN-END:variables
