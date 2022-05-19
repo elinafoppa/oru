@@ -1,0 +1,32 @@
+package javaapplication1;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import oru.inf.InfDB;
+import oru.inf.InfException;
+
+/**
+ *
+ * @author Victo
+ */
+public class JavaApplication1 {
+
+    private static InfDB idb;
+    
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) throws InfException {
+        
+        try {
+            idb = new InfDB ("mibdB", "3306", "mibdba", "mibkey");
+            
+        } catch (InfException ex) {
+            Logger.getLogger(JavaApplication1.class.getName()).log(Level.SEVERE, null, ex);
+        }
+// TODO code application logic here
+
+new AdminLogin(idb).setVisible(true);
+    }
+    
+}
